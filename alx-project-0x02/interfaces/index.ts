@@ -7,3 +7,8 @@ export interface HeaderProps {
   title?: string;
   links?: NavLink[];
 }
+
+export interface CardProps {
+    title: string;
+    content: string;
+}
