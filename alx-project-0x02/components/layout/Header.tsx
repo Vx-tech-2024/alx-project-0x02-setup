@@ -7,7 +7,7 @@ const Header = () => {
         <h1 className="text-2xl font-bold">ALX Project 02</h1>
 
         <nav className="space-x-6">
-          <Link href="/" className="hover:underline">
+          <Link href="/home" className="hover:underline">
             Home
           </Link>
 
