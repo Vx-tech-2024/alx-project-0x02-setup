@@ -2,29 +2,12 @@ import Head from "next/head";
 import Header from "@/components/layout/Header";
 import PostCard from "@/components/common/PostCard";
 import { PostProps } from "@/interfaces";
-import { useEffect, useState } from "react";
 
-export default function PostsPage() {
-  const [posts, setPosts] = useState<PostProps[]>([]);
+interface PostsPageProps {
+  posts: PostProps[];
+}
 
-  useEffect(() => {
-    async function fetchPosts() {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=10");
-      const data = await res.json();
-
-      // Map API data to PostProps shape
-      const formattedPosts: PostProps[] = data.map((post: any) => ({
-        title: post.title,
-        content: post.body,
-        userId: post.userId,
-      }));
-
-      setPosts(formattedPosts);
-    }
-
-    fetchPosts();
-  }, []);
-
+export default function PostsPage({ posts }: PostsPageProps) {
   return (
     <>
       <Head>
@@ -37,20 +20,33 @@ export default function PostsPage() {
         <h1 className="text-4xl font-bold mb-6 text-center">Posts</h1>
 
         <div className="grid grid-cols-1 gap-6">
-          {posts.length > 0 ? (
-            posts.map((post, index) => (
-              <PostCard
-                key={index}
-                title={post.title}
-                content={post.content}
-                userId={post.userId}
-              />
-            ))
-          ) : (
-            <p className="text-center text-gray-600">Loading posts...</p>
-          )}
+          {posts.map((post, index) => (
+            <PostCard
+              key={index}
+              title={post.title}
+              content={post.content}
+              userId={post.userId}
+            />
+          ))}
         </div>
       </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=10");
+  const data = await res.json();
+
+  const posts: PostProps[] = data.map((post: any) => ({
+    title: post.title,
+    content: post.body,
+    userId: post.userId,
+  }));
+
+  return {
+    props: {
+      posts,
+    },
+  };
 }
